@@ -1,38 +1,5 @@
 #include <stdio.h>
-
-/* Input and Output Operations
-
-   These operations handle basic input and output to from the terminal.
-*/
-#define READ 10  // Read a word from the terminal into a specific location in memory
-#define WRITE 11 // Write a word from a specific location in memory to the terminal
-
-/* Load and Store Operations
-   
-   These operations handle loading and storing to the accumalator.
-*/
-#define LOAD 20  // Load a word from a specific location in memory into the accumulator
-#define STORE 21 // Store a word from the accumulator into a specific location in memory
-
-/* Arithmetic Operations
-   
-   These operations handle all arithmetic operations
-*/
-#define ADD 30 // Add a word from a specific location in memory to the word in the accumalator and then leaves the result in the accumulator
-#define SUBSTRACT 31 // Substract a word from a specific location in memory to the word in the accumalator and then leaves the result in the accumulator
-#define DIVIDE 32 // Divide a word from a specific location in memory into the word in the accumalator and then leaves the result in the accumulator
-#define MULTIPLY 33 // Multiply a word from a specific location in memory to the word in the accumalator and then leaves it in the accumulator
-
-/* Transfer of control operations
-
-   Useful for making jumps in the program
-*/
-#define BRANCH 40     // Branch to a specific location in memory
-#define BRANCHNEG 41  // Branch to a specific location in memory if the accumulator is negative
-#define BRANCHZERO 42 // Branch to a specific location in memory if the accumulator is zero
-#define HALT 43       // Halt the program
-
-#define SIZE 100 // memory size
+#include "simpletron.h"
 
 void intro(){
     printf("*** Welcome to Simpletron! ***\n");
@@ -56,16 +23,81 @@ int main(){
     intro();
 
     int inp = 0;
-    int i = 0;
-    // loading progra,
+    int n = 0;
+    // loading program
     while (inp != -9999){
-        printf("%02d ? ", i);
+        printf("%02d ? ", n);
         scanf("%d", &inp);
-        memory[i] = inp;
-        ++i;
+        memory[n] = inp;
+        ++n;
     }
     printf("*** Program loading completed ***\n");
     printf("*** Program execution begins  ***\n");
-   
+    
+    // Run infinte loop through the instructions
+    int e = 0;
+    while (e != 100)
+    {   
+        // get current instruction
+        instructionRegister = memory[instructionCounter];
+
+        // get opcode and operand
+        operationCode = instructionRegister / 100;
+        operand = instructionRegister % 100;
+
+       switch (operationCode)
+        {
+            case READ:
+                printf("? ");
+                scanf("%d", &memory[ operand ]);
+                ++instructionCounter;
+                break;
+            
+            case WRITE:
+                printf("? %02d\n", memory[ operand ]);
+                ++instructionCounter;
+                break;
+            
+            case LOAD:
+                accumulator = memory[ operand ];
+                ++instructionCounter;
+                break;
+            
+            case STORE:
+                memory[ operand ] = accumulator;
+                ++instructionCounter;
+                break;
+            
+            case ADD:
+                accumulator += memory[ operand ];
+                ++instructionCounter;
+                break;
+            
+            case SUBSTRACT:
+                accumulator -= memory[ operand ];
+                ++instructionCounter;
+                break;
+
+            case DIVIDE:
+                accumulator /= memory[ operand ];
+                ++instructionCounter;
+                break;
+
+            case MULTIPLY:
+                accumulator *= memory[ operand ];
+                ++instructionCounter;
+                break;
+            
+            case HALT:
+                e = 100;
+                break;
+
+            default:
+                //printf("%d Incorrect instruction \n", operationCode);
+                break;
+            
+        }
+    }
+       
     return 0;
 }
