@@ -50,45 +50,69 @@ int main(){
             case READ:
                 printf("? ");
                 scanf("%d", &memory[ operand ]);
+                printf("%d loaded into memory address: %d\n", memory[ operand ], operand);
                 ++instructionCounter;
                 break;
             
             case WRITE:
-                printf("? %02d\n", memory[ operand ]);
+                printf("? %02d from memory address: %d\n", memory[ operand ], operand);
                 ++instructionCounter;
                 break;
             
             case LOAD:
+                printf("Loaded %d into the accumulator.\n", memory[ operand ]);
                 accumulator = memory[ operand ];
                 ++instructionCounter;
                 break;
             
             case STORE:
+                printf("Copied %d from the accumulator into memory address %d.\n",accumulator, operand);
                 memory[ operand ] = accumulator;
                 ++instructionCounter;
                 break;
             
             case ADD:
+                printf("Add %d to the acummulator's value: %d.\n", memory[ operand ], accumulator);                
                 accumulator += memory[ operand ];
                 ++instructionCounter;
                 break;
             
             case SUBSTRACT:
+                printf("Substract %d from the acummulator's value: %d.\n", memory[ operand ], accumulator);                            
                 accumulator -= memory[ operand ];
                 ++instructionCounter;
                 break;
 
             case DIVIDE:
+                printf("Divide the acummulator's value: %d with %d.\n", accumulator, memory[ operand ]); 
                 accumulator /= memory[ operand ];
                 ++instructionCounter;
                 break;
 
             case MULTIPLY:
+                printf("Multiply the accumulator's value: %d with %d.\n", accumulator, memory[ operand ]);
                 accumulator *= memory[ operand ];
                 ++instructionCounter;
                 break;
             
+            case BRANCH:
+                printf("Performed Jump to: %d\n", operand);
+                instructionCounter = operand;
+                break;
+            
+            case BRANCHNEG:
+                if (accumulator < 0 )
+                    instructionCounter = operand;
+                break;
+            
+            case BRANCHZERO:
+                if (accumulator == 0)
+                    instructionCounter = operand;
+                break;
+
+            
             case HALT:
+                printf("Program Halted\n");
                 e = 100;
                 break;
 
