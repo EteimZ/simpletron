@@ -1,7 +1,9 @@
 #ifndef CPU
 	#define CPU
 
-#include <iostrem>
+#include <iostream>
+
+using namespace std;
 
 namespace simpletron{
     enum Operands{
@@ -20,25 +22,25 @@ namespace simpletron{
         BRANCHNEG = 41,     // Branch to a specific location in memory if the accumulator is negative
         BRANCHZERO = 42,    // Branch to a specific location in memory if the accumulator is zero
         HALT = 43,          // Halt the program
-    }
+    };
 
     #define SIZE 100 // memory size
-    
-    class CPU{
+
+    class Processor{
         private:
             int memory[SIZE]; // memory
-            int accumulator = 0; // The accumulator
-            int instructionCounter = 0;  // The memory address of the current instruction
-            int instructionRegister = 0; // The current instruction to be performed
-            int operationCode = 0; // The operation code currently being perfromed
-            int operand = 0; // The memory address the current variable operates
-        
+            int accumulator; // The accumulator
+            int instructionCounter;  // The memory address of the current instruction
+            int instructionRegister; // The current instruction to be performed
+            int operationCode; // The operation code currently being perfromed
+            int operand; // The memory address the current variable operates
         public:
-            CPU();
+            Processor();
             void load();
             void run();
-    }
+    };
 
     void intro();
 }
+
 #endif

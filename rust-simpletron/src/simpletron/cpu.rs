@@ -59,19 +59,16 @@ impl CPU {
     pub fn load(&mut self) {
         let mut inp = 0;
         let mut index: usize = 0;
+        let mut line: String = String::new();
         // loading program
         while inp != -9999{
-            println!("{:6} ? ", index);
-            let mut line: String = String::new();
-            match std::io::stdin().read_line(&mut line){
-                Err(error) => {
-                    print!("invalid input {}", error);
-                },
-                Ok(_) =>{
-                    inp =  line.trim().parse().unwrap();
-                    self.memory[ index ] = inp;
-                }
+            print!("{} >> ", index);
+            if let Err(error) = std::io::stdin().read_line(&mut line){
+                print!("invalid input {}", error);
             }
+            inp =  line.trim().parse().unwrap();
+            self.memory[ index ] = inp;
+            print!("\n");
             index += 1;
         }
         println!("*** Program loading completed ***");
@@ -94,19 +91,15 @@ impl CPU {
                     match operand {
                         Operands::READ =>{
                             println!("? ");
-                            //scanf("%d", &self.memory[ self.operand as usize ]);
                             let mut line: String = String::new();
-                            match std::io::stdin().read_line(&mut line){
-                                Err(error) => {
-                                    print!("invalid input {}", error);
-                                    e = 100;
-                                },
-                                Ok(_) =>{
-                                    self.memory[ self.operand as usize ] = line.trim().parse().unwrap();
-                                    println!("{} loaded into memory address: {}", self.memory[ self.operand as usize ], self.operand);
-                                    self.instruction_counter += 1;
-                                }
+                            if let Err(error) = std::io::stdin().read_line(&mut line){
+                                print!("invalid input {}", error);
+                                e = 100;
                             }
+
+                            self.memory[ self.operand as usize ] = line.trim().parse().unwrap();
+                            println!("{} loaded into memory address: {}", self.memory[ self.operand as usize ], self.operand);
+                            self.instruction_counter += 1;
                         }
                         Operands::WRITE =>{
                             println!("? {} from memory address: {}", self.memory[ self.operand as usize ], self.operand);

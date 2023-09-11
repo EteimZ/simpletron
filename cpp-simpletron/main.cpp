@@ -1,10 +1,11 @@
-include "cpu.h"
+#include "processor.h"
 
-int main{
-    simpletron::CPU cpu;
+int main(int length, char** args){
+    simpletron::intro();
 
-    cpu.load();
-    cpu.run();
+    simpletron::Processor processor;
+    processor.load();
+    processor.run();
     
     return 0;
 }

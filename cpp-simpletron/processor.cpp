@@ -1,6 +1,6 @@
-include "cpu.h"
+#include "processor.h"
 
-simpletron::intro(){
+void simpletron::intro(){
    std::cout<<"*** Welcome to Simpletron! ***"<<std::endl;
    std::cout<<"*** Please enter your program one instruction ***"<<std::endl;
    std::cout<<"*** (or data word) at a time. I will type the ***"<<std::endl;
@@ -10,13 +10,19 @@ simpletron::intro(){
    std::cout<<"*** your program. ***"<<std::endl;
 }
 
-simpletron::CPU::CPU(){
-    for(int i = 0; i < simpletron::SIZE; i++){
+simpletron::Processor::Processor(){
+    for(int i = 0; i < SIZE; i++){
         this->memory[i] = 0;
     }
+
+    this->accumulator = 0;
+    this->instructionCounter = 0;
+    this->instructionRegister = 0;
+    this->operationCode = 0;
+    this->operand = 0;
 }
 
-void simpletron::CPU::run(){
+void simpletron::Processor::load(){
     int inp = 0;
     int n = 0;
     // loading program
@@ -30,7 +36,7 @@ void simpletron::CPU::run(){
     printf("*** Program execution begins  ***\n");
 }
 
-void simpletron::CPU::run(){
+void simpletron::Processor::run(){
     // Run infinte loop through the instructions
     int e = 0;
     while (e != 100){   
@@ -118,4 +124,3 @@ void simpletron::CPU::run(){
         }
     }
 }
-
