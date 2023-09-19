@@ -1,3 +1,6 @@
+#ifndef SIMPLETRON_H
+#define SIMPLETRON_H
+
 // Operations
 
 #define READ 10  // Read a word from the terminal into a specific location in memory
@@ -17,3 +20,17 @@
 #define HALT 43       // Halt the program
 
 #define SIZE 100 // memory size
+
+// The simpletron computer
+struct SIMPLETRON {
+    int accumulator; // The accumulator
+    int instructionCounter;  // The memory address of the current instruction
+    int instructionRegister; // The current instruction to be performed
+    int operationCode; // The operation code currently being perfromed
+    int operand; // The memory address the current variable operates 
+    int memory[SIZE]; // memory
+};
+
+
+
+#endif
