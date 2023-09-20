@@ -19,7 +19,10 @@ The program above is **SML**, it instructs the computer to add two numbers toget
 
 ## Usage
 
+To use the C implementation of Simpletron, follow the instruction below:
+
 ```bash
+cd c-simpletron
 gcc main.c -o main # compile the program
 ./main # run the program
 ```
