@@ -10,42 +10,80 @@ struct SIMPLETRON simpl;
 void intro();
 void computerDump(struct SIMPLETRON simpletron);
 
-int main()
+int main(int argc, char *argv[])
 {
 
     intro();
 
-    int inp = 0;
-    int n = 0;
-
-    // loading program
-    while (1)
+    if (argc == 2)
     {
-        if (inp == -9999)
+        FILE *filePointer;
+        int bufferLength = 10;
+        char buffer[bufferLength];
+
+        filePointer = fopen(argv[1], "r");
+
+        if (filePointer == NULL)
         {
-            break;
+            printf("Error! Could not open file\n");
+            exit(-1);
         }
 
-        printf("%02d ? ", n);
-        scanf("%d", &inp);
+        int m = 0;
 
-        if (inp > 9999 || inp < -9999)
+        while (fgets(buffer, bufferLength, filePointer))
         {
-            printf("Incorrect input!\n");
-            printf("Please try again\n");
-            continue;
+            if (atoi(buffer) > 9999 || atoi(buffer) < -9999)
+            {
+                printf("Incorrect input!\n");
+                exit(-1);
+            }
+
+            simpl.memory[m] = atoi(buffer);
+            ++m;
         }
 
-        simpl.memory[n] = inp;
+        fclose(filePointer);
+    }
+    else if (argc > 2)
+    {
+        printf("Too many arguments supplied.\n");
+        exit(-1);
+    }
+    else
+    {
+        int inp = 0;
+        int n = 0;
 
-        ++n;
+        // loading program
+        while (1)
+        {
+            if (inp == -9999)
+            {
+                break;
+            }
+
+            printf("%02d ? ", n);
+            scanf("%d", &inp);
+
+            if (inp > 9999 || inp < -9999)
+            {
+                printf("Incorrect input!\n");
+                printf("Please try again\n");
+                continue;
+            }
+
+            simpl.memory[n] = inp;
+
+            ++n;
+        }
     }
 
     printf("*** Program loading completed ***\n");
     printf("*** Program execution begins  ***\n");
 
     // Run infinte loop through the instructions
-    
+
     while (simpl.instructionCounter < 100)
     {
         // get current instruction
@@ -84,11 +122,12 @@ int main()
         case ADD:
             printf("Add %d to the acummulator's value: %d.\n", simpl.memory[simpl.operand], simpl.accumulator);
             simpl.accumulator += simpl.memory[simpl.operand];
-            if ( simpl.accumulator > 9999 || simpl.accumulator < -9999 ){
+            if (simpl.accumulator > 9999 || simpl.accumulator < -9999)
+            {
                 printf("*** Accumulator overflow ***\n");
-                printf("*** Simpletron execution abnormally terminated ***\n");     
+                printf("*** Simpletron execution abnormally terminated ***\n");
                 computerDump(simpl);
-                exit(1);  
+                exit(1);
             }
             ++simpl.instructionCounter;
             break;
@@ -96,21 +135,23 @@ int main()
         case SUBSTRACT:
             printf("Substract %d from the acummulator's value: %d.\n", simpl.memory[simpl.operand], simpl.accumulator);
             simpl.accumulator -= simpl.memory[simpl.operand];
-            if ( simpl.accumulator > 9999 || simpl.accumulator < -9999 ){
+            if (simpl.accumulator > 9999 || simpl.accumulator < -9999)
+            {
                 printf("*** Accumulator overflow ***\n");
-                printf("*** Simpletron execution abnormally terminated ***\n");     
+                printf("*** Simpletron execution abnormally terminated ***\n");
                 computerDump(simpl);
-                exit(1);  
+                exit(1);
             }
             ++simpl.instructionCounter;
             break;
 
         case DIVIDE:
-            if (simpl.memory[simpl.operand] == 0){
+            if (simpl.memory[simpl.operand] == 0)
+            {
                 printf("*** Attempt to divide by zero ***\n");
-                printf("*** Simpletron execution abnormally terminated ***\n");     
+                printf("*** Simpletron execution abnormally terminated ***\n");
                 computerDump(simpl);
-                exit(1);  
+                exit(1);
             }
             printf("Divide the acummulator's value: %d with %d.\n", simpl.accumulator, simpl.memory[simpl.operand]);
             simpl.accumulator /= simpl.memory[simpl.operand];
@@ -120,33 +161,37 @@ int main()
         case MULTIPLY:
             printf("Multiply the accumulator's value: %d with %d.\n", simpl.accumulator, simpl.memory[simpl.operand]);
             simpl.accumulator *= simpl.memory[simpl.operand];
-            if ( simpl.accumulator > 9999 || simpl.accumulator < -9999 ){
+            if (simpl.accumulator > 9999 || simpl.accumulator < -9999)
+            {
                 printf("*** Accumulator overflow ***\n");
-                printf("*** Simpletron execution abnormally terminated ***\n");     
+                printf("*** Simpletron execution abnormally terminated ***\n");
                 computerDump(simpl);
-                exit(1);  
+                exit(1);
             }
             ++simpl.instructionCounter;
             break;
 
         case BRANCH:
             printf("Performed Jump to: %d\n", simpl.operand);
-            if ( simpl.operand > 100 | simpl.operand < 0){
+            if (simpl.operand > 100 | simpl.operand < 0)
+            {
                 printf("*** Invalid Jump ***\n");
-                printf("*** Simpletron execution abnormally terminated ***\n");     
+                printf("*** Simpletron execution abnormally terminated ***\n");
                 computerDump(simpl);
-                exit(1);  
+                exit(1);
             }
             simpl.instructionCounter = simpl.operand;
             break;
 
         case BRANCHNEG:
-            if (simpl.accumulator < 0){
-                if ( simpl.operand > 100 | simpl.operand < 0){
+            if (simpl.accumulator < 0)
+            {
+                if (simpl.operand > 100 | simpl.operand < 0)
+                {
                     printf("*** Invalid Jump ***\n");
-                    printf("*** Simpletron execution abnormally terminated ***\n");     
+                    printf("*** Simpletron execution abnormally terminated ***\n");
                     computerDump(simpl);
-                    exit(1);  
+                    exit(1);
                 }
                 simpl.instructionCounter = simpl.operand;
             }
@@ -155,12 +200,14 @@ int main()
             break;
 
         case BRANCHZERO:
-            if (simpl.accumulator == 0){
-                if ( simpl.operand > 100 | simpl.operand < 0){
+            if (simpl.accumulator == 0)
+            {
+                if (simpl.operand > 100 | simpl.operand < 0)
+                {
                     printf("*** Invalid Jump ***\n");
                     printf("*** Simpletron execution abnormally terminated ***\n");
-                    computerDump(simpl);     
-                    exit(1);  
+                    computerDump(simpl);
+                    exit(1);
                 }
                 simpl.instructionCounter = simpl.operand;
             }
